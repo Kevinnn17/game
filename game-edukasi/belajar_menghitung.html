@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Berhitung Hewan</title>
+    <link rel="stylesheet" href="assets/libs/sweetalert2.min.css" />
+    <style>
+      body {
+        font-family: "Comic Sans MS", cursive;
+        text-align: center;
+        background: linear-gradient(#f8f8f8, #d1e8ff);
+        padding: 20px;
+      }
+
+      h1 {
+        margin-bottom: 10px;
+      }
+
+      .baris-hewan {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+        min-height: 80px;
+      }
+
+      .gambar-hewan {
+        width: 70px;
+        height: 70px;
+      }
+
+      .operator {
+        font-size: 40px;
+        margin: 10px 0;
+      }
+
+      .jawaban-row {
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .kotak-jawaban {
+        width: 60px;
+        height: 60px;
+        border: 2px dashed #555;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        background-color: white;
+      }
+
+      .angka-pilihan {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .angka {
+        width: 50px;
+        height: 50px;
+        background-color: #4caf50;
+        color: white;
+        font-size: 24px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: grab;
+        user-select: none;
+      }
+
+      .angka:active {
+        cursor: grabbing;
+      }
+
+      select {
+        font-size: 1rem;
+        padding: 6px 10px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Game Berhitung Hewan 🐾</h1>
+
+    <label for="pilihOperator">Pilih Operasi: </label>
+    <select id="pilihOperator" onchange="acakSoal()">
+      <option value="+">Penjumlahan (+)</option>
+      <option value="-">Pengurangan (-)</option>
+      <option value="×">Perkalian (×)</option>
+    </select>
+
+    <div class="baris-hewan" id="baris1"></div>
+    <div class="operator" id="tandaOperator">+</div>
+    <div class="baris-hewan" id="baris2"></div>
+
+    <div class="jawaban-row">
+      <span class="operator">=</span>
+      <div
+        class="kotak-jawaban"
+        id="jawabanKotak"
+        ondrop="drop(event)"
+        ondragover="allowDrop(event)"
+      ></div>
+    </div>
+
+    <div class="angka-pilihan" id="pilihanAngka"></div>
+
+    <script src="assets/libs/sweetalert2.min.js"></script>
+    <script>
+      const hewanData = [
+        { kata: "ikan", gambar: "assets/baca/ikan.png" },
+        { kata: "gajah", gambar: "assets/baca/gajah.png" },
+        { kata: "kucing", gambar: "assets/baca/kucing.png" },
+        { kata: "ular", gambar: "assets/baca/ular.png" },
+        { kata: "ayam", gambar: "assets/baca/ayam.png" },
+        { kata: "bebek", gambar: "assets/baca/bebek.png" },
+        { kata: "babi", gambar: "assets/baca/babi.png" },
+        { kata: "kuda", gambar: "assets/baca/kuda.png" },
+        { kata: "tikus", gambar: "assets/baca/tikus.png" },
+        { kata: "sapi", gambar: "assets/baca/sapi.png" },
+        { kata: "monyet", gambar: "assets/baca/monyet.png" },
+      ];
+
+      let jawabanBenar = 0;
+
+      function acakSoal() {
+        const baris1 = document.getElementById("baris1");
+        const baris2 = document.getElementById("baris2");
+        const pilihanAngka = document.getElementById("pilihanAngka");
+        const tandaOperator = document.getElementById("tandaOperator");
+        const selectOperator = document.getElementById("pilihOperator");
+
+        document.getElementById("jawabanKotak").innerText = "";
+        baris1.innerHTML = "";
+        baris2.innerHTML = "";
+        pilihanAngka.innerHTML = "";
+
+        const operator = selectOperator.value;
+        tandaOperator.innerText = operator;
+
+        let jumlah1 = Math.floor(Math.random() * 5) + 1;
+        let jumlah2 = Math.floor(Math.random() * 5) + 1;
+
+        if (operator === "-" && jumlah2 > jumlah1) {
+          [jumlah1, jumlah2] = [jumlah2, jumlah1];
+        }
+
+        if (operator === "×") {
+          jumlah1 = Math.floor(Math.random() * 3) + 1;
+          jumlah2 = Math.floor(Math.random() * 4) + 1;
+        }
+
+        const hewan1 = hewanData[Math.floor(Math.random() * hewanData.length)];
+        const hewan2 = hewanData[Math.floor(Math.random() * hewanData.length)];
+
+        jawabanBenar = hitung(jumlah1, jumlah2, operator);
+
+        for (let i = 0; i < jumlah1; i++) {
+          const img = document.createElement("img");
+          img.src = hewan1.gambar;
+          img.alt = hewan1.kata;
+          img.className = "gambar-hewan";
+          baris1.appendChild(img);
+        }
+
+        for (let i = 0; i < jumlah2; i++) {
+          const img = document.createElement("img");
+          img.src = hewan2.gambar;
+          img.alt = hewan2.kata;
+          img.className = "gambar-hewan";
+          baris2.appendChild(img);
+        }
+
+        const angkaUnik = new Set();
+        angkaUnik.add(jawabanBenar);
+        while (angkaUnik.size < 6)
+          angkaUnik.add(Math.floor(Math.random() * 20));
+
+        Array.from(angkaUnik)
+          .sort(() => Math.random() - 0.5)
+          .forEach((angka) => {
+            const el = document.createElement("div");
+            el.className = "angka";
+            el.innerText = angka;
+            el.draggable = true;
+            el.ondragstart = (event) => {
+              event.dataTransfer.setData("text", angka);
+            };
+            pilihanAngka.appendChild(el);
+          });
+      }
+
+      function hitung(a, b, op) {
+        if (op === "+") return a + b;
+        if (op === "-") return a - b;
+        if (op === "×") return a * b;
+        return 0;
+      }
+
+      function allowDrop(event) {
+        event.preventDefault();
+      }
+
+      function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData("text");
+        const kotak = document.getElementById("jawabanKotak");
+        kotak.innerText = data;
+
+        if (parseInt(data) === jawabanBenar) {
+          Swal.fire("Benar!", "Jawaban kamu tepat!", "success").then(() => {
+            acakSoal();
+          });
+        } else {
+          Swal.fire("Salah", "Coba lagi ya!", "error");
+        }
+      }
+
+      window.onload = acakSoal;
+    </script>
+  </body>
+</html>
