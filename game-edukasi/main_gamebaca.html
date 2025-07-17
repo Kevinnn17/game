@@ -3,13 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game Baca - Drag & Drop</title>
+    <title>Game Baca - Drag Huruf</title>
     <link rel="stylesheet" href="assets/libs/sweetalert2.min.css" />
     <style>
       * {
         box-sizing: border-box;
       }
-
       body {
         font-family: "Comic Sans MS", cursive;
         background: linear-gradient(to right, #ffecd2, #fcb69f);
@@ -17,13 +16,11 @@
         padding: 20px;
         margin: 0;
       }
-
       h1 {
         color: #d63031;
         font-size: 32px;
         margin-bottom: 20px;
       }
-
       .gambar-hewan {
         width: 220px;
         height: 220px;
@@ -33,7 +30,6 @@
         background-color: white;
         padding: 10px;
       }
-
       .jawaban {
         margin: 25px auto;
         display: flex;
@@ -42,7 +38,6 @@
         min-height: 80px;
         flex-wrap: wrap;
       }
-
       .kotak {
         width: 70px;
         height: 70px;
@@ -52,19 +47,28 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.3s;
+        font-size: 30px;
+        color: #2d3436;
+        font-weight: bold;
       }
-
       .kotak:hover {
-        background-color: #ffeaa7cc;
+        background-color: #fdcb6e;
       }
 
       .huruf {
         width: 60px;
         height: 60px;
+        background-color: #74b9ff;
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: grab;
         user-select: none;
-        transition: transform 0.2s;
+        touch-action: none;
       }
 
       .huruf:active {
@@ -100,6 +104,7 @@
         .huruf {
           width: 55px;
           height: 55px;
+          font-size: 24px;
         }
 
         h1 {
@@ -122,10 +127,24 @@
         { kata: "gajah", gambar: "assets/baca/gajah.png" },
         { kata: "kucing", gambar: "assets/baca/kucing.png" },
         { kata: "ular", gambar: "assets/baca/ular.png" },
+        { kata: "ayam", gambar: "assets/baca/ayam.png" },
+        { kata: "bebek", gambar: "assets/baca/bebek.png" },
+        { kata: "babi", gambar: "assets/baca/babi.png" },
+        { kata: "kuda", gambar: "assets/baca/kuda.png" },
+        { kata: "tikus", gambar: "assets/baca/tikus.png" },
+        { kata: "sapi", gambar: "assets/baca/sapi.png" },
+        { kata: "monyet", gambar: "assets/baca/monyet.png" },
       ];
 
       let currentIndex = 0;
       let jawabanKotak = [];
+
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
 
       function tampilkanSoal() {
         const soal = data[currentIndex];
@@ -144,11 +163,7 @@
           kotak.ondrop = function (e) {
             e.preventDefault();
             const huruf = e.dataTransfer.getData("text");
-            const img = document.createElement("img");
-            img.src = `assets/huruf/${huruf}.png`;
-            img.className = "huruf";
-            this.innerHTML = "";
-            this.appendChild(img);
+            this.textContent = huruf.toUpperCase();
             this.dataset.huruf = huruf;
             cekJawaban();
           };
@@ -159,20 +174,28 @@
 
         const bankDiv = document.getElementById("bankHuruf");
         bankDiv.innerHTML = "";
-        const abjad = "abcdefghijklmnopqrstuvwxyz";
 
-        for (let huruf of abjad) {
-          const img = document.createElement("img");
-          img.src = `assets/huruf/${huruf}.png`;
-          img.className = "huruf";
-          img.draggable = true;
-          img.dataset.huruf = huruf;
+        // Ambil huruf dari jawaban + tambahan acak untuk ganggu
+        const targetHuruf = soal.kata.split("");
+        const abjad = "abcdefghijklmnopqrstuvwxyz".split("");
+        while (targetHuruf.length < soal.kata.length + 4) {
+          const hurufAcak = abjad[Math.floor(Math.random() * abjad.length)];
+          targetHuruf.push(hurufAcak);
+        }
+        shuffleArray(targetHuruf);
 
-          img.ondragstart = function (e) {
+        for (let huruf of targetHuruf) {
+          const el = document.createElement("div");
+          el.className = "huruf";
+          el.textContent = huruf.toUpperCase();
+          el.draggable = true;
+          el.dataset.huruf = huruf;
+
+          el.ondragstart = function (e) {
             e.dataTransfer.setData("text", this.dataset.huruf);
           };
 
-          bankDiv.appendChild(img);
+          bankDiv.appendChild(el);
         }
 
         document.getElementById("notif").textContent = "";
@@ -208,15 +231,20 @@
               timer: 1500,
               showConfirmButton: false,
             });
-
             for (let kotak of jawabanKotak) {
-              kotak.innerHTML = "";
+              kotak.textContent = "";
               delete kotak.dataset.huruf;
             }
           }
         }
       }
 
+      // Blok context menu (klik tahan)
+      document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+
+      shuffleArray(data);
       tampilkanSoal();
     </script>
   </body>
