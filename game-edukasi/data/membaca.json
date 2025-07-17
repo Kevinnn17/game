@@ -1,0 +1,13 @@
+
+[
+  {
+    "question": "Budi pergi ke pasar. Apa yang dilakukan Budi?",
+    "choices": ["Tidur", "Makan", "Pergi ke pasar", "Main bola"],
+    "answer": "Pergi ke pasar"
+  },
+  {
+    "question": "Ibu memasak di...",
+    "choices": ["Ruang tamu", "Dapur", "Kamar", "Teras"],
+    "answer": "Dapur"
+  }
+]

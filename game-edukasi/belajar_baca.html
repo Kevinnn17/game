@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Belajar Baca - Menu</title>
+    <style>
+      /* Reset dan umum */
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Comic Sans MS", cursive;
+        background: linear-gradient(to bottom right, #fff6e5, #ffeaa7);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      /* Container utama */
+      .container {
+        background-color: #ffffffcc;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        padding: 40px 30px;
+        max-width: 500px;
+        width: 90%;
+      }
+
+      h1 {
+        color: #d35400;
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 20px;
+        color: #555;
+        margin-bottom: 30px;
+      }
+
+      .menu-buttons {
+        margin-top: 20px;
+      }
+
+      /* Tombol utama */
+      button {
+        font-size: 20px;
+        padding: 15px 30px;
+        margin: 10px;
+        border: none;
+        border-radius: 15px;
+        background-color: #fd79a8;
+        color: white;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+        background-color: #e84393;
+        transform: scale(1.05);
+      }
+
+      /* Responsif untuk mobile */
+      @media (max-width: 480px) {
+        button {
+          width: 100%;
+          margin: 10px 0;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        p {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📖 Belajar Baca</h1>
+      <p>Pilih mode untuk mulai belajar:</p>
+
+      <div class="menu-buttons">
+        <button onclick="location.href='belajar_dulu.html'">
+          ✅ Belajar Dulu
+        </button>
+        <button onclick="location.href='main_gamebaca.html'">
+          🎮 Main Game
+        </button>
+      </div>
+
+      <div style="margin-top: 30px">
+        <button onclick="location.href='index.html'">
+          🏠 Kembali ke Menu Utama
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

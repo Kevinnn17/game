@@ -1,0 +1,67 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom right, #c8e6c9, #fffde7);
+  text-align: center;
+}
+
+.container {
+  padding: 60px 20px;
+}
+
+h1 {
+  color: #2e7d32;
+  font-size: 36px;
+}
+
+.subtitle {
+  color: #555;
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 300px;
+  margin: auto;
+}
+
+.menu button {
+  padding: 15px 20px;
+  font-size: 18px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.menu button:hover {
+  background-color: #388e3c;
+}
+.huruf {
+  margin: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background-color: #4db6ac;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+}
+
+.huruf:hover {
+  background-color: #00897b;
+}
+
+.huruf img {
+  pointer-events: none; /* supaya klik tetap di tombol */
+}

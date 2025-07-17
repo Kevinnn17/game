@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Belajar Dulu</title>
+    <style>
+      body {
+        font-family: "Comic Sans MS", cursive;
+        background: linear-gradient(to bottom, #fce4ec, #fad0c4);
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #e91e63;
+      }
+
+      .gambar-hewan {
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+        margin-bottom: 20px;
+      }
+
+      .ejaan {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+      }
+
+      .ejaan img {
+        width: 60px;
+        height: 60px;
+      }
+
+      button {
+        font-size: 18px;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 10px;
+        background-color: #ff6b81;
+        color: white;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #ff4757;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔤 Belajar Mengeja</h1>
+    <img id="gambarHewan" class="gambar-hewan" src="" alt="Hewan" />
+    <div id="ejaan" class="ejaan"></div>
+    <button onclick="selanjutnya()">➡️ Selanjutnya</button>
+
+    <script>
+      const data = [
+        { kata: "ikan", gambar: "assets/baca/ikan.png" },
+        { kata: "gajah", gambar: "assets/baca/gajah.png" },
+        { kata: "kucing", gambar: "assets/baca/kucing.png" },
+        { kata: "ular", gambar: "assets/baca/ular.png" },
+      ];
+
+      let index = 0;
+
+      function tampilkan() {
+        const item = data[index];
+        document.getElementById("gambarHewan").src = item.gambar;
+
+        const ejaanContainer = document.getElementById("ejaan");
+        ejaanContainer.innerHTML = "";
+
+        for (let huruf of item.kata.toLowerCase()) {
+          const img = document.createElement("img");
+          img.src = `assets/huruf/${huruf}.png`;
+          img.alt = huruf.toUpperCase();
+          ejaanContainer.appendChild(img);
+        }
+      }
+
+      function selanjutnya() {
+        index = (index + 1) % data.length;
+        tampilkan();
+      }
+
+      tampilkan();
+    </script>
+  </body>
+</html>

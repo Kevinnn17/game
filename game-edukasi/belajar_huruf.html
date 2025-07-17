@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Belajar Huruf - Game Edukasi Katikutana</title>
+    <link rel="stylesheet" href="assets/libs/sweetalert2.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Fredoka One", cursive;
+        background: linear-gradient(135deg, #a0e9ff, #fcd1ff);
+        text-align: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        padding: 2rem;
+        max-width: 700px;
+        margin: auto;
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-top: 2rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: #ff6b6b;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 1.5rem;
+      }
+
+      .mode-switch {
+        margin-bottom: 1.5rem;
+      }
+
+      .mode-switch label {
+        font-size: 1rem;
+        color: #333;
+        margin: 0 1rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 15px;
+        justify-items: center;
+        padding: 10px;
+        max-width: 600px;
+        margin: auto;
+      }
+
+      .huruf {
+        border: none;
+        background: #fff;
+        padding: 10px;
+        border-radius: 15px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .huruf img {
+        width: 60px;
+        height: 60px;
+      }
+
+      .huruf:active {
+        transform: scale(1.1);
+      }
+
+      .huruf.highlight {
+        box-shadow: 0 0 15px 5px #4caf50;
+      }
+
+      .back {
+        margin-top: 2rem;
+      }
+
+      .back button {
+        font-size: 16px;
+        padding: 12px 24px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .back button:hover {
+        background-color: #388e3c;
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 2rem;
+        }
+
+        .subtitle {
+          font-size: 1rem;
+        }
+
+        .huruf img {
+          width: 50px;
+          height: 50px;
+        }
+
+        .back button {
+          font-size: 14px;
+          padding: 10px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Musik latar -->
+    <audio id="bg-music" loop autoplay>
+      <source src="assets/audio/bintang-kecil.mp3" type="audio/mpeg" />
+      Browser Anda tidak mendukung audio.
+    </audio>
+
+    <div class="container">
+      <h1>🔤 Belajar Huruf</h1>
+      <p class="subtitle">Klik huruf untuk belajar mengenal A sampai Z</p>
+
+      <!-- Mode Switch -->
+      <div class="mode-switch">
+        <label
+          ><input type="radio" name="mode" value="belajar" checked /> Mode
+          Belajar</label
+        >
+        <label><input type="radio" name="mode" value="uji" /> Mode Uji</label>
+      </div>
+
+      <div class="letters">
+        <div class="grid" id="grid-huruf"></div>
+      </div>
+
+      <div class="back">
+        <a href="index.html"><button>🏠 Kembali ke Menu</button></a>
+      </div>
+    </div>
+
+    <script src="assets/libs/sweetalert2.min.js"></script>
+    <script>
+      const abjad = "abcdefghijklmnopqrstuvwxyz";
+      const grid = document.getElementById("grid-huruf");
+      let lastClicked = null;
+      let mode = "belajar";
+      let soalHuruf = "";
+
+      // Ganti mode
+      document.querySelectorAll('input[name="mode"]').forEach((radio) => {
+        radio.addEventListener("change", (e) => {
+          mode = e.target.value;
+          if (mode === "uji") {
+            mulaiSoal();
+          } else {
+            Swal.fire("Kembali ke mode belajar!");
+          }
+        });
+      });
+
+      // Soal acak
+      function mulaiSoal() {
+        const acak = abjad[Math.floor(Math.random() * abjad.length)];
+        soalHuruf = acak;
+        Swal.fire(`Klik huruf: <b>${acak.toUpperCase()}</b>`);
+      }
+
+      // Buat tombol huruf
+      for (let i = 0; i < abjad.length; i++) {
+        const huruf = abjad[i];
+        const btn = document.createElement("button");
+        btn.className = "huruf";
+
+        const img = document.createElement("img");
+        img.src = `assets/huruf/${huruf}.png`;
+        img.alt = huruf.toUpperCase();
+        btn.appendChild(img);
+
+        // Event klik
+        btn.addEventListener("click", () => {
+          if (lastClicked) {
+            lastClicked.classList.remove("highlight");
+          }
+          btn.classList.add("highlight");
+          lastClicked = btn;
+
+          // Mainkan suara
+          const audio = new Audio(`assets/audio/huruf/${huruf}.mp3`);
+          audio.play();
+
+          // Mode uji atau belajar
+          if (mode === "belajar") {
+            Swal.fire(`Ini huruf <b>${huruf.toUpperCase()}</b>`);
+          } else {
+            if (huruf === soalHuruf) {
+              Swal.fire({
+                title: "Benar!",
+                icon: "success",
+              });
+              mulaiSoal();
+            } else {
+              Swal.fire({
+                title: "Salah!",
+                icon: "error",
+              });
+            }
+          }
+        });
+
+        grid.appendChild(btn);
+      }
+    </script>
+  </body>
+</html>
